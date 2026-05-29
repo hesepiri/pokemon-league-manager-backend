@@ -1,2 +1,2 @@
-# pokemon_league_manager_backend
+# pokemon-league-manager-backend
 Backend for Pokemon Team Builder and Dashboard
