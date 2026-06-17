@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 // Controlador para el Registro (POST /signup)
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
 
   // Encriptamos la contraseña con un factor de costo de 10
@@ -32,14 +32,13 @@ const createUser = (req, res) => {
       if (err.name === "ValidationError") {
         return res.status(400).send({ message: err.message });
       }
-      res
-        .status(500)
-        .send({ message: "Error interno del servidor al registrar usuario." });
+      // Pasamos el error al manejador centralizado de Express
+      next(err);
     });
 };
 
 // Controlador para el Inicio de Sesión (POST /signin)
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   // Buscamos al usuario e incluimos explícitamente el password que está oculto por defecto
@@ -60,25 +59,23 @@ const login = (req, res) => {
             .send({ message: "Correo electrónico o contraseña incorrectos." });
         }
 
-        // Si las credenciales son correctas, generamos el token JWT
-        // Nota: En desarrollo usamos una clave harcodeada, en producción usaremos process.env.JWT_SECRET
-        const token = jwt.sign(
-          { _id: user._id },
+        // CONDICIÓN DEL PUNTO 4 DE TRIPLETEN:
+        // Si estamos en producción usa JWT_SECRET, si no, usa la clave por defecto 'dev-secret-key'
+        // Esto evita que falle localmente si no existe el archivo .env
+        const jwtSecret =
           process.env.NODE_ENV === "production"
             ? process.env.JWT_SECRET
-            : "dev-secret-key",
-          { expiresIn: "7d" },
-        );
+            : "dev-secret-key";
 
-        // Devolvemos el token al cliente
-        res.send({ token });
+        const token = jwt.sign({ _id: user._id }, jwtSecret, {
+          expiresIn: "7d",
+        });
+
+        // Devolvemos el token al cliente con estatus 200 explícito
+        res.status(200).send({ token });
       });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({ message: "Error interno del servidor al iniciar sesión." });
-    });
+    .catch(next); // Delegamos errores inesperados al manejador centralizado
 };
 
 module.exports = {
