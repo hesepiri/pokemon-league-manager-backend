@@ -1,0 +1,35 @@
+{
+  "name": "pokemon-league-manager-backend",
+  "version": "1.0.0",
+  "description": "Backend for Pokemon Team Builder and Dashboard",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hesepiri/pokemon-league-manager-backend.git"
+  },
+  "keywords": [],
+  "author": "Hector Sergio Pinedo Rivera",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hesepiri/pokemon-league-manager-backend/issues"
+  },
+  "homepage": "https://github.com/hesepiri/pokemon-league-manager-backend#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "celebrate": "^15.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-winston": "^4.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
