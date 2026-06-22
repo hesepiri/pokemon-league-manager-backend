@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { celebrate, Joi, errors } = require("celebrate");
+const cors = require("cors");
 require("dotenv").config();
 
 // Controladores
@@ -24,6 +25,8 @@ const {
 const app = express();
 
 app.use(express.json());
+
+app.use(cors());
 
 mongoose
   .connect(MONGO_DB)
